@@ -168,10 +168,10 @@ public class Matrix {
     public static Matrix  getNullMatrix(int n,int m){
         return new Matrix(n,m);
     }
-    public static Matrix  getIndentMatrix(int n){
-        Matrix f=new Matrix(n);
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+    public static Matrix  getIndentMatrix(int N){
+        Matrix f=new Matrix(N);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
                 f.a[i][j]=1;
             }
         }
