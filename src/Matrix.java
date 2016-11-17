@@ -6,7 +6,7 @@ public class Matrix {
     Matrix(double[][] a){
         this.n=a.length;
         this.m=a[0].length;
-        this.a=new double[m][n];
+        this.a=new double[n][m];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 this.a[i][j]=a[i][j];
@@ -50,10 +50,11 @@ public class Matrix {
         return key+"]";
     }
     void print(){
+        double eps=Math.pow(10,-8);
         System.out.print("Matrix=\n[\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                String b=a[i][j]+" ";
+                String b=(Math.abs(a[i][j])<eps?"0":a[i][j])+" ";
                 System.out.print(b+"\t");
             }
             System.out.print("\n");
@@ -61,10 +62,11 @@ public class Matrix {
         System.out.println("]");
     }
     void printf(){
+        double eps=Math.pow(10,-8);
         System.out.print("Matrix=\n[\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                System.out.printf("%5.1f",a[i][j]);
+                System.out.printf("%5.1f",(Math.abs(a[i][j])<eps?0:a[i][j]));
                 System.out.print("\t");
             }
             System.out.print("\n");
@@ -138,32 +140,16 @@ public class Matrix {
             if(n==1)
                 d=a[0][0];
             if(n==2)
-                d=d+a[0][0]*a[1][1]-a[0][1]*a[1][0];
+              d=d+a[0][0]*a[1][1]-a[0][1]*a[1][0];
             else
-                for (int i = 1; i <= n; i++) {
-                    double d1=this.dim(1,i).det();
-                    d=d+d1*a[0][i-1]*(int)(Math.pow(-1,i+1));
-                }
+                  for (int i = 1; i <= n; i++) {
+                      double d1=this.dim(1,i).det();
+                      d=d+d1*a[0][i-1]*(int)(Math.pow(-1,i+1));
+                  }
         }
         else
             System.out.println("Error!");
         return d;
-    }
-    Matrix inv(){
-        Matrix f=new Matrix();
-        if(m!=n||this.det()==0){
-            System.out.println("Error!");
-        }
-        else
-        {
-            f=new Matrix(n);
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    f.a[i][j]=1/a[i][j];
-                }
-            }
-        }
-        return f;
     }
     public static Matrix  getNullMatrix(int n,int m){
         return new Matrix(n,m);
@@ -177,8 +163,23 @@ public class Matrix {
         }
         return f;
     }
-    public static Matrix getIndentMatrix(){
+    public static Matrix getIndentMatrix() {
         return getIndentMatrix(nl);
-
+    }
+    Matrix inv(){
+        Matrix f=new Matrix();
+        if(m!=n||this.det()==0){
+            System.out.println("Error!");
+        }
+        else
+        {
+            f=new Matrix(n);
+            for (int i = 1; i <= n; i++) {
+                for (int j = 1; j <= n; j++) {
+                    f.a[i-1][j-1]=dim(j,i).det()/(this.det()*Math.pow(-1,i+j));
+                }
+            }
+        }
+        return f;
     }
 }
